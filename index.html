@@ -16,6 +16,7 @@
     --orange: #f39c12;
     --gray: #7f8c8d;
     --purple: #9b59b6;
+    --teal: #1abc9c;
     --text: #e8e8f0;
     --text-muted: #8888a0;
   }
@@ -33,15 +34,15 @@
   header p { color: var(--text-muted); margin-top: 0.5rem; font-size: 0.95rem; }
 
   .controls {
-    display: flex; gap: 1rem; align-items: center; justify-content: center;
+    display: flex; gap: 0.6rem; align-items: center; justify-content: center;
     padding: 1rem 2rem; flex-wrap: wrap;
     background: var(--surface);
     border-bottom: 1px solid var(--border);
   }
   .controls button {
-    padding: 0.5rem 1.2rem; border: 1px solid var(--border);
+    padding: 0.45rem 1rem; border: 1px solid var(--border);
     background: var(--surface2); color: var(--text); cursor: pointer;
-    border-radius: 6px; font-size: 0.9rem; transition: all 0.2s;
+    border-radius: 6px; font-size: 0.85rem; transition: all 0.2s;
   }
   .controls button:hover, .controls button.active {
     background: var(--accent); border-color: var(--accent); color: #fff;
@@ -54,6 +55,13 @@
   }
   .legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: var(--text-muted); }
   .dot { width: 10px; height: 10px; border-radius: 50%; }
+
+  .stats-bar {
+    display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center;
+    padding: 0.6rem 2rem; background: var(--surface2); border-bottom: 1px solid var(--border);
+    font-size: 0.8rem; color: var(--text-muted);
+  }
+  .stats-bar span b { color: var(--text); }
 
   main { max-width: 1200px; margin: 0 auto; padding: 2rem; }
 
@@ -81,6 +89,7 @@
   .event-card.qualifier { border-left-color: var(--blue); }
   .event-card.final { border-left-color: var(--accent); }
   .event-card.local { border-left-color: var(--green); }
+  .event-card.eu { border-left-color: var(--teal); }
   .event-card.tba { border-left-color: var(--gray); opacity: 0.7; }
   .event-card.global { border-left-color: var(--purple); }
   .event-card.semifinal { border-left-color: var(--orange); }
@@ -99,17 +108,14 @@
     font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: 20px;
     font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
   }
-  .tag.cat-qualifier { background: rgba(74,144,226,0.2); color: #4a90e2; }
-  .tag.cat-final { background: rgba(230,57,70,0.2); color: #e63946; }
-  .tag.cat-local { background: rgba(46,204,113,0.2); color: #2ecc71; }
-  .tag.cat-global { background: rgba(155,89,182,0.2); color: #9b59b6; }
   .tag.cat-rx { background: rgba(243,156,18,0.2); color: #f39c12; }
   .tag.cat-scaled { background: rgba(52,152,219,0.2); color: #3498db; }
   .tag.cat-intermediate { background: rgba(26,188,156,0.2); color: #1abc9c; }
   .tag.cat-masters { background: rgba(230,126,34,0.2); color: #e67e22; }
   .tag.cat-teams { background: rgba(52,73,94,0.5); color: #bdc3c7; }
   .tag.cat-open { background: rgba(149,165,166,0.2); color: #95a5a6; }
-  .tag.cat-tba { background: rgba(127,140,141,0.2); color: #7f8c8d; }
+  .tag.cat-amator { background: rgba(46,204,113,0.15); color: #2ecc71; }
+  .tag.cat-licensed { background: rgba(26,188,156,0.15); color: #1abc9c; }
 
   .event-location { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.3rem; }
   .event-location::before { content: '📍 '; }
@@ -121,6 +127,7 @@
   .badge-qualifier { background: rgba(74,144,226,0.15); color: #4a90e2; border: 1px solid rgba(74,144,226,0.3); }
   .badge-final { background: rgba(230,57,70,0.15); color: #e63946; border: 1px solid rgba(230,57,70,0.3); }
   .badge-local { background: rgba(46,204,113,0.15); color: #2ecc71; border: 1px solid rgba(46,204,113,0.3); }
+  .badge-eu { background: rgba(26,188,156,0.15); color: #1abc9c; border: 1px solid rgba(26,188,156,0.3); }
   .badge-global { background: rgba(155,89,182,0.15); color: #9b59b6; border: 1px solid rgba(155,89,182,0.3); }
   .badge-semifinal { background: rgba(243,156,18,0.15); color: #f39c12; border: 1px solid rgba(243,156,18,0.3); }
   .badge-tba { background: rgba(127,140,141,0.15); color: #7f8c8d; border: 1px solid rgba(127,140,141,0.3); }
@@ -132,16 +139,17 @@
     display: none; position: fixed; inset: 0;
     background: rgba(0,0,0,0.7); z-index: 100;
     align-items: center; justify-content: center;
+    padding: 1rem;
   }
   .modal-overlay.open { display: flex; }
   .modal {
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: 14px; padding: 2rem; max-width: 500px; width: 90%;
+    border-radius: 14px; padding: 2rem; max-width: 520px; width: 100%;
     position: relative;
   }
-  .modal h2 { font-size: 1.3rem; margin-bottom: 1rem; color: var(--text); }
+  .modal h2 { font-size: 1.3rem; margin-bottom: 1rem; color: var(--text); padding-right: 2rem; }
   .modal .detail-row { display: flex; gap: 0.5rem; margin-bottom: 0.6rem; font-size: 0.9rem; }
-  .detail-label { color: var(--text-muted); min-width: 90px; }
+  .detail-label { color: var(--text-muted); min-width: 90px; flex-shrink: 0; }
   .modal-close {
     position: absolute; top: 1rem; right: 1rem;
     background: none; border: none; color: var(--text-muted);
@@ -161,7 +169,7 @@
 
 <header>
   <h1>CROSSFIT <span>CALENDAR</span> 2026</h1>
-  <p>Polskie i europejskie zawody CrossFit · CrossFit Games Season 2026</p>
+  <p>Polska · Europa · CrossFit Games Season 2026 · Źródło: CrossFit HQ Licensed Events</p>
 </header>
 
 <div class="controls">
@@ -171,18 +179,22 @@
   <button data-filter="semifinal">Semifinals</button>
   <button data-filter="qualifier">Kwalifikacje</button>
   <button data-filter="final">Finały</button>
-  <button data-filter="local">Lokalne</button>
+  <button data-filter="local">🇵🇱 Polska</button>
+  <button data-filter="eu">🇪🇺 Europa (Licensed)</button>
   <button data-filter="tba">TBA</button>
 </div>
 
 <div class="legend">
-  <div class="legend-item"><div class="dot" style="background:#9b59b6"></div> CrossFit HQ / Global</div>
+  <div class="legend-item"><div class="dot" style="background:#9b59b6"></div> CrossFit HQ</div>
   <div class="legend-item"><div class="dot" style="background:#f39c12"></div> Semifinals</div>
   <div class="legend-item"><div class="dot" style="background:#4a90e2"></div> Kwalifikacje</div>
   <div class="legend-item"><div class="dot" style="background:#e63946"></div> Finały</div>
-  <div class="legend-item"><div class="dot" style="background:#2ecc71"></div> Lokalne eventy</div>
+  <div class="legend-item"><div class="dot" style="background:#2ecc71"></div> Polska</div>
+  <div class="legend-item"><div class="dot" style="background:#1abc9c"></div> Europa Licensed</div>
   <div class="legend-item"><div class="dot" style="background:#7f8c8d"></div> TBA</div>
 </div>
+
+<div class="stats-bar" id="stats-bar"></div>
 
 <main id="calendar-main"></main>
 
@@ -202,7 +214,7 @@ const EVENTS = [
     start: "2026-02-26", end: "2026-03-16",
     type: "global", categories: ["Open"],
     location: "Online (worldwide)",
-    notes: "Roczny open — wejście do sezonu CrossFit Games 2026. Każdy może się zapisać."
+    notes: "Roczny open — wejście do sezonu CrossFit Games 2026. Każdy może się zapisać na games.crossfit.com"
   },
   // ==================== CROSSFIT HQ — QUARTERFINALS ====================
   {
@@ -221,11 +233,11 @@ const EVENTS = [
     notes: "CrossFit Games 2026 Semifinal — North America East"
   },
   {
-    name: "Mayhem Classic (Semifinal) — Weekend 2",
+    name: "Mayhem Classic (Semifinal) — Weekend 2 / Masters",
     start: "2026-04-24", end: "2026-04-27",
     type: "semifinal", categories: ["Masters"],
     location: "Cookeville, TN, USA",
-    notes: "CrossFit Games 2026 Semifinal — Masters / second wave"
+    notes: "CrossFit Games 2026 Semifinal — Masters wave"
   },
   {
     name: "Far East Throwdown (Semifinal)",
@@ -235,11 +247,25 @@ const EVENTS = [
     notes: "CrossFit Games 2026 Semifinal — Asia / Pacific region"
   },
   {
-    name: "French Throwdown (Semifinal)",
+    name: "Age-Group Online Semifinals 2026",
+    start: "2026-05-07", end: "2026-05-12",
+    type: "semifinal", categories: ["Masters"],
+    location: "Online",
+    notes: "Półfinał online dla kategorii wiekowych (Masters / Age Groups)"
+  },
+  {
+    name: "French Throwdown / Europe Semifinal",
     start: "2026-05-15", end: "2026-05-17",
     type: "semifinal", categories: ["RX"],
-    location: "Francja",
-    notes: "CrossFit Games 2026 Semifinal — Europe region (France)"
+    location: "LDLC Arena, Décines-Charpieu, Francja",
+    notes: "CrossFit Games 2026 Semifinal — Europe region. Jeden z najważniejszych europejskich półfinałów."
+  },
+  {
+    name: "Adaptive Online Semifinals 2026",
+    start: "2026-05-14", end: "2026-05-18",
+    type: "semifinal", categories: [],
+    location: "Online",
+    notes: "Półfinał online dla kategorii Adaptive Athletes"
   },
   {
     name: "Torian Pro (Semifinal)",
@@ -253,36 +279,14 @@ const EVENTS = [
     start: "2026-05-29", end: "2026-05-31",
     type: "semifinal", categories: ["Teams"],
     location: "USA",
-    notes: "CrossFit Games 2026 Semifinal — North America East (Teams)"
+    notes: "CrossFit Games 2026 Semifinal — Teams (North America East)"
   },
   {
     name: "Northern California Classic (Semifinal)",
     start: "2026-05-29", end: "2026-06-01",
     type: "semifinal", categories: ["RX"],
-    location: "Norcal, USA",
+    location: "Northern California, USA",
     notes: "CrossFit Games 2026 Semifinal — North America West"
-  },
-  {
-    name: "Strength in Depth (Semifinal)",
-    start: "2026-06-12", end: "2026-06-14",
-    type: "semifinal", categories: ["RX"],
-    location: "Londyn, UK",
-    notes: "CrossFit Games 2026 Semifinal — Europe (UK). Najważniejszy europejski półfinał."
-  },
-  // ==================== CROSSFIT HQ — SEMIFINALS (Online) ====================
-  {
-    name: "Age-Group Online Semifinals 2026",
-    start: "2026-05-07", end: "2026-05-12",
-    type: "semifinal", categories: ["Masters"],
-    location: "Online",
-    notes: "Półfinał online dla kategorii wiekowych (Masters)"
-  },
-  {
-    name: "Adaptive Online Semifinals 2026",
-    start: "2026-05-14", end: "2026-05-18",
-    type: "semifinal", categories: [],
-    location: "Online",
-    notes: "Półfinał online dla kategorii Adaptive Athletes"
   },
   {
     name: "Team Online Semifinals 2026",
@@ -298,15 +302,28 @@ const EVENTS = [
     location: "Online",
     notes: "Półfinał online dla zawodników indywidualnych"
   },
+  {
+    name: "Strength in Depth (Semifinal)",
+    start: "2026-06-12", end: "2026-06-14",
+    type: "semifinal", categories: ["RX"],
+    location: "Londyn, UK",
+    notes: "CrossFit Games 2026 Semifinal — Europe (UK). Najważniejszy europejski półfinał."
+  },
   // ==================== CROSSFIT GAMES ====================
   {
     name: "CrossFit Games 2026",
     start: "2026-07-01", end: "2026-07-31",
     type: "global", categories: ["RX", "Masters", "Teams"],
-    location: "USA (data dokładna TBC)",
-    notes: "Największe zawody CrossFit na świecie. Dokładna data zostanie potwierdzona przez CrossFit HQ."
+    location: "USA (dokładna data TBC przez CrossFit HQ)",
+    notes: "Największe zawody CrossFit na świecie — finał sezonu 2026"
   },
-  // ==================== COMMUNITY ====================
+  {
+    name: "Masters CrossFit Games 2026",
+    start: "2026-08-29", end: "2026-09-01",
+    type: "global", categories: ["Masters"],
+    location: "Birmingham, Alabama, USA",
+    notes: "Mistrzostwa CrossFit dla kategorii Masters (by Legends)"
+  },
   {
     name: "CrossFit Community Cup 2026",
     start: "2026-08-01", end: "2026-08-31",
@@ -315,13 +332,61 @@ const EVENTS = [
     notes: "Miesięczny event dla społeczności CrossFit — wszystkie poziomy"
   },
 
-  // ==================== MAJ — POLSKIE / EUROPEJSKIE ====================
+  // ==================== LUTY — EU LICENSED ====================
+  {
+    name: "The Dutch Throwdown (Buddy Edition)",
+    start: "2026-02-17", end: "2026-02-18",
+    type: "eu", categories: ["Licensed"],
+    location: "Den Bosch, Holandia",
+    notes: "CrossFit HQ Licensed Event. Impreza partnerska w Holandii."
+  },
+  {
+    name: "Beach Showdown — Indoor Edition",
+    start: "2026-02-24", end: "2026-02-25",
+    type: "eu", categories: ["Licensed"],
+    location: "Zandvoort, Holandia",
+    notes: "CrossFit HQ Licensed Event. Wersja zimowa słynnego Beach Showdown."
+  },
+
+  // ==================== MARZEC — EU LICENSED ====================
+  {
+    name: "The Crown",
+    start: "2026-03-27", end: "2026-04-01",
+    type: "eu", categories: ["Licensed"],
+    location: "Mallorca, Hiszpania",
+    notes: "CrossFit HQ Licensed Event — prestiżowe zawody na Majorce"
+  },
+
+  // ==================== KWIECIEŃ — EU LICENSED ====================
+  {
+    name: "Le Mans Contest",
+    start: "2026-04-25", end: "2026-04-26",
+    type: "eu", categories: ["Licensed"],
+    location: "Le Mans, Francja",
+    notes: "CrossFit HQ Licensed Event — Francja"
+  },
+  {
+    name: "5.7 Throwdown",
+    start: "2026-04-26", end: "2026-04-28",
+    type: "eu", categories: ["Licensed"],
+    location: "Amnéville, Francja",
+    notes: "CrossFit HQ Licensed Event — wschodnia Francja"
+  },
+  {
+    name: "Deutschland Showdown",
+    start: "2026-04-27", end: "2026-04-28",
+    type: "eu", categories: ["Licensed"],
+    location: "Wiesbaden, Niemcy",
+    notes: "CrossFit HQ Licensed Event — zawody w Niemczech"
+  },
+
+  // ==================== MAJ — POLSKIE ====================
   {
     name: "Czechia Throwdown 2026 — Kwalifikacje",
     start: "2026-05-01", end: "2026-05-22",
     type: "qualifier", categories: ["Intermediate"],
     location: "Czechy",
-    notes: "Okno kwalifikacyjne do Czechia Throwdown Finals (październik)"
+    notes: "Okno kwalifikacyjne do Czechia Throwdown Finals (październik). Kategoria Intermediate."
   },
   {
     name: "Belgrad Games 2026 — Kwalifikacje",
@@ -335,7 +400,7 @@ const EVENTS = [
     start: "2026-05-23", end: "2026-05-23",
     type: "local", categories: ["Scaled"],
     location: "Polska",
-    notes: "Lokalne zawody CrossFit"
+    notes: "Lokalne zawody CrossFit w Polsce"
   },
   {
     name: "Login Lublin",
@@ -345,13 +410,57 @@ const EVENTS = [
     notes: ""
   },
 
-  // ==================== CZERWIEC ====================
+  // ==================== MAJ — EU LICENSED ====================
+  {
+    name: "Start Up Games",
+    start: "2026-05-03", end: "2026-05-04",
+    type: "eu", categories: ["Licensed"],
+    location: "České Budějovice, Czechy",
+    notes: "CrossFit HQ Licensed Event — zawody w Czechach, blisko polskiej granicy"
+  },
+  {
+    name: "Bohemian Throwdown",
+    start: "2026-05-10", end: "2026-05-12",
+    type: "eu", categories: ["Licensed"],
+    location: "Plzeň, Czechy",
+    notes: "CrossFit HQ Licensed Event — jeden z największych czeskich eventów CrossFit"
+  },
+  {
+    name: "Fittest in Denmark",
+    start: "2026-05-18", end: "2026-05-19",
+    type: "eu", categories: ["Licensed"],
+    location: "Aarhus, Dania",
+    notes: "CrossFit HQ Licensed Event — jeden z największych eventów w Skandynawii"
+  },
+  {
+    name: "Blue Light United",
+    start: "2026-05-24", end: "2026-05-25",
+    type: "eu", categories: ["Licensed"],
+    location: "Apeldoorn, Holandia",
+    notes: "CrossFit HQ Licensed Event — zawody dla służb mundurowych i nie tylko"
+  },
+  {
+    name: "Belgium Showdown",
+    start: "2026-05-25", end: "2026-05-26",
+    type: "eu", categories: ["Licensed"],
+    location: "Beveren, Belgia",
+    notes: "CrossFit HQ Licensed Event — największy belgijski event CrossFit"
+  },
+  {
+    name: "Italian Showdown",
+    start: "2026-05-29", end: "2026-05-31",
+    type: "eu", categories: ["Licensed"],
+    location: "Rimini, Włochy",
+    notes: "CrossFit HQ Licensed Event — jeden z największych włoskich eventów CrossFit"
+  },
+
+  // ==================== CZERWIEC — POLSKIE / EUROPEJSKIE ====================
   {
     name: "German Throwdown 2026 — Kwalifikacje",
     start: "2026-06-11", end: "2026-07-04",
     type: "qualifier", categories: ["Intermediate", "Scaled"],
-    location: "Niemcy",
-    notes: "Okno kwalifikacyjne online / hybrydowe do German Throwdown Finals (listopad)"
+    location: "Niemcy (online/hybrydowo)",
+    notes: "Okno kwalifikacyjne online do German Throwdown Finals (listopad)"
   },
   {
     name: "Malaga Throwdown 2026 — Kwalifikacje",
@@ -375,7 +484,30 @@ const EVENTS = [
     notes: ""
   },
 
-  // ==================== LIPIEC ====================
+  // ==================== CZERWIEC — EU LICENSED ====================
+  {
+    name: "Unicorn Throwdown",
+    start: "2026-06-06", end: "2026-06-07",
+    type: "eu", categories: ["Licensed"],
+    location: "Amiens, Francja",
+    notes: "CrossFit HQ Licensed Event — północna Francja"
+  },
+  {
+    name: "Madeira Games",
+    start: "2026-06-07", end: "2026-06-09",
+    type: "eu", categories: ["Licensed"],
+    location: "Funchal, Madera, Portugalia",
+    notes: "CrossFit HQ Licensed Event — egzotyczna lokalizacja na Maderze"
+  },
+  {
+    name: "Cannes Showdown",
+    start: "2026-06-20", end: "2026-06-21",
+    type: "eu", categories: ["Licensed"],
+    location: "Cannes, Francja",
+    notes: "CrossFit HQ Licensed Event — Lazurowe Wybrzeże"
+  },
+
+  // ==================== LIPIEC — POLSKIE ====================
   {
     name: "East Summer Challenge",
     start: "2026-07-04", end: "2026-07-04",
@@ -398,16 +530,76 @@ const EVENTS = [
     notes: ""
   },
 
-  // ==================== SIERPIEŃ ====================
+  // ==================== LIPIEC — EU LICENSED ====================
+  {
+    name: "Malaga Throwdown (Event)",
+    start: "2026-07-05", end: "2026-07-07",
+    type: "eu", categories: ["Licensed"],
+    location: "Malaga, Hiszpania",
+    notes: "CrossFit HQ Licensed Event — letnie zawody w Maladze (osobne od okna kwalifikacyjnego)"
+  },
+  {
+    name: "SiD UK Championships",
+    start: "2026-07-05", end: "2026-07-07",
+    type: "eu", categories: ["Licensed"],
+    location: "Birmingham, UK",
+    notes: "CrossFit HQ Licensed Event — Strength in Depth UK Championships"
+  },
+  {
+    name: "Norwegian Throwdown",
+    start: "2026-07-06", end: "2026-07-07",
+    type: "eu", categories: ["Licensed"],
+    location: "Oslo, Norwegia",
+    notes: "CrossFit HQ Licensed Event — największy skandynawski event CrossFit"
+  },
+  {
+    name: "Valmeinier Throwdown",
+    start: "2026-07-11", end: "2026-07-14",
+    type: "eu", categories: ["Licensed"],
+    location: "Valmeinier, Francja (Alpy)",
+    notes: "CrossFit HQ Licensed Event — zawody w alpejskim kurorcie we Francji"
+  },
+
+  // ==================== SIERPIEŃ — POLSKA ====================
   {
     name: "Login Krotoszyn",
     start: "2026-08-07", end: "2026-08-09",
     type: "local", categories: [],
     location: "Krotoszyn, PL",
-    notes: ""
+    notes: "Organizowane przez LAB CrossFit (Live Again Better) — Krotoszyn + Wielkopolska. CrossFit HQ Licensed."
   },
 
-  // ==================== WRZESIEŃ ====================
+  // ==================== SIERPIEŃ — EU LICENSED ====================
+  {
+    name: "Arena Throwdown — Classic Edition",
+    start: "2026-08-18", end: "2026-08-18",
+    type: "eu", categories: ["Licensed"],
+    location: "Amsterdam, Holandia",
+    notes: "CrossFit HQ Licensed Event — klasyczna edycja Amsterdam Throwdown"
+  },
+  {
+    name: "Liege Throwdown",
+    start: "2026-08-24", end: "2026-08-26",
+    type: "eu", categories: ["Licensed"],
+    location: "Liège, Belgia",
+    notes: "CrossFit HQ Licensed Event — jeden z najważniejszych belgijskich eventów"
+  },
+  {
+    name: "Big Summer Games",
+    start: "2026-08-09", end: "2026-08-11",
+    type: "eu", categories: ["Licensed"],
+    location: "České Budějovice, Czechy",
+    notes: "CrossFit HQ Licensed Event — letnie zawody w Czechach"
+  },
+  {
+    name: "Beach Showdown — Buddy Edition",
+    start: "2026-08-31", end: "2026-09-01",
+    type: "eu", categories: ["Licensed"],
+    location: "Zandvoort, Holandia",
+    notes: "CrossFit HQ Licensed Event — letnia edycja Beach Showdown na plaży"
+  },
+
+  // ==================== WRZESIEŃ — POLSKIE ====================
   {
     name: "Belgrad Games 2026 — Finał",
     start: "2026-09-18", end: "2026-09-20",
@@ -416,7 +608,37 @@ const EVENTS = [
     notes: ""
   },
 
-  // ==================== PAŹDZIERNIK ====================
+  // ==================== WRZESIEŃ — EU LICENSED ====================
+  {
+    name: "Milan Throwdown",
+    start: "2026-09-06", end: "2026-09-08",
+    type: "eu", categories: ["Licensed"],
+    location: "Mediolan, Włochy",
+    notes: "CrossFit HQ Licensed Event — CrossFit Full Gear San Siro, Mediolan"
+  },
+  {
+    name: "CrossFit Mayfly Budapest",
+    start: "2026-09-07", end: "2026-09-07",
+    type: "eu", categories: ["Licensed"],
+    location: "Budapest, Węgry",
+    notes: "CrossFit HQ Licensed Event — blisko granicy z Polską!"
+  },
+  {
+    name: "Paestum Throwdown",
+    start: "2026-09-13", end: "2026-09-15",
+    type: "eu", categories: ["Licensed"],
+    location: "Paestum, Salerno, Włochy",
+    notes: "CrossFit HQ Licensed Event — południe Włoch"
+  },
+  {
+    name: "Mayenne Throwdown",
+    start: "2026-09-27", end: "2026-09-29",
+    type: "eu", categories: ["Licensed"],
+    location: "Laval, Francja",
+    notes: "CrossFit HQ Licensed Event — zachodnia Francja"
+  },
+
+  // ==================== PAŹDZIERNIK — POLSKIE ====================
   {
     name: "Czechia Throwdown Finals",
     start: "2026-10-10", end: "2026-10-11",
@@ -429,30 +651,67 @@ const EVENTS = [
     start: null, end: null,
     type: "tba", categories: [],
     location: "Radomsko, PL",
-    notes: "Data TBA"
+    notes: "Data TBA — obserwuj organizatorów"
   },
 
-  // ==================== LISTOPAD ====================
+  // ==================== PAŹDZIERNIK — EU LICENSED ====================
+  {
+    name: "Swiss Throwdown",
+    start: "2026-10-04", end: "2026-10-06",
+    type: "eu", categories: ["Licensed"],
+    location: "Kriens, Szwajcaria",
+    notes: "CrossFit HQ Licensed Event — największy szwajcarski event CrossFit"
+  },
+  {
+    name: "German Throwdown (Mainz)",
+    start: "2026-10-05", end: "2026-10-06",
+    type: "eu", categories: ["Licensed"],
+    location: "Mainz, Niemcy",
+    notes: "CrossFit HQ Licensed Event — CrossFit Rhein-Neckar, Mainz"
+  },
+  {
+    name: "Halmstad Throwdown",
+    start: "2026-10-05", end: "2026-10-06",
+    type: "eu", categories: ["Licensed"],
+    location: "Halmstad, Szwecja",
+    notes: "CrossFit HQ Licensed Event — zawody w Szwecji"
+  },
+  {
+    name: "LX Games",
+    start: "2026-10-11", end: "2026-10-13",
+    type: "eu", categories: ["Licensed"],
+    location: "Lizbona, Portugalia",
+    notes: "CrossFit HQ Licensed Event — największy event CrossFit w Portugalii"
+  },
+  {
+    name: "The Dutch Throwdown — Individual Edition",
+    start: "2026-10-12", end: "2026-10-13",
+    type: "eu", categories: ["Licensed"],
+    location: "Den Bosch, Holandia",
+    notes: "CrossFit HQ Licensed Event — indywidualna edycja Dutch Throwdown"
+  },
+
+  // ==================== LISTOPAD — POLSKIE ====================
   {
     name: "German Throwdown Finals",
     start: "2026-11-07", end: "2026-11-08",
     type: "final", categories: [],
     location: "Niemcy",
-    notes: ""
+    notes: "Finał German Throwdown 2026 — wymagane przejście kwalifikacji (czerwiec-lipiec)"
   },
   {
     name: "Malaga Throwdown Finals",
     start: "2026-11-27", end: "2026-11-29",
     type: "final", categories: [],
     location: "Malaga, Hiszpania",
-    notes: ""
+    notes: "Finał Malaga Throwdown 2026 — wymagane przejście kwalifikacji"
   },
   {
     name: "Best Fit Games Amator",
     start: null, end: null,
-    type: "tba", categories: [],
+    type: "tba", categories: ["Amator"],
     location: "Rybnik, PL",
-    notes: "Data TBA"
+    notes: "Data TBA — kategoria amatorska"
   },
 
   // ==================== GRUDZIEŃ ====================
@@ -461,7 +720,7 @@ const EVENTS = [
     start: "2026-12-05", end: "2026-12-06",
     type: "final", categories: [],
     location: "Amsterdam, Holandia",
-    notes: ""
+    notes: "Finał Amsterdam Throwdown 2026"
   },
 ];
 
@@ -483,7 +742,8 @@ const MONTHS = [
 const TYPE_LABELS = {
   qualifier: "Kwalifikacje",
   final: "Finał",
-  local: "Event",
+  local: "🇵🇱 Polska",
+  eu: "🇪🇺 EU Licensed",
   global: "CrossFit HQ",
   semifinal: "Semifinal",
   tba: "TBA",
@@ -493,6 +753,7 @@ const BADGE_CLASS = {
   qualifier: "badge-qualifier",
   final: "badge-final",
   local: "badge-local",
+  eu: "badge-eu",
   global: "badge-global",
   semifinal: "badge-semifinal",
   tba: "badge-tba",
@@ -502,6 +763,7 @@ const CARD_CLASS = {
   qualifier: "qualifier",
   final: "final",
   local: "local",
+  eu: "eu",
   global: "global",
   semifinal: "semifinal",
   tba: "tba",
@@ -552,9 +814,24 @@ function buildCard(ev, idx) {
     </div>`;
 }
 
+function updateStats(filtered) {
+  const bar = document.getElementById("stats-bar");
+  const counts = {};
+  filtered.forEach(e => { counts[e.type] = (counts[e.type]||0)+1; });
+  const total = filtered.length;
+  let html = `<span>Łącznie: <b>${total}</b></span>`;
+  const order = ["global","semifinal","qualifier","final","local","eu","tba"];
+  const labels = {global:"HQ",semifinal:"Semifinals",qualifier:"Kwalifikacje",final:"Finały",local:"Polska",eu:"EU Licensed",tba:"TBA"};
+  order.forEach(t => {
+    if (counts[t]) html += `<span>${labels[t]}: <b>${counts[t]}</b></span>`;
+  });
+  bar.innerHTML = html;
+}
+
 function render() {
   const main = document.getElementById("calendar-main");
   const filtered = activeFilter === "all" ? EVENTS : EVENTS.filter(e => e.type === activeFilter);
+  updateStats(filtered);
 
   const tbaEvents = filtered.filter(e => !e.start);
   const dated = filtered.filter(e => e.start);
@@ -571,7 +848,7 @@ function render() {
       <div class="month-header">
         <div class="month-name">${m.name}</div>
         <div class="month-line"></div>
-        <div class="event-count">${sortedMonth.length} event${sortedMonth.length !== 1 ? 'ów' : ''}</div>
+        <div class="event-count">${sortedMonth.length} event${sortedMonth.length > 1 ? 'ów' : ''}</div>
       </div>
       <div class="events-grid">
         ${sortedMonth.map((ev, i) => buildCard(ev, originalIndexes[i])).join("")}
@@ -584,7 +861,7 @@ function render() {
       <div class="month-header">
         <div class="month-name">Data TBA</div>
         <div class="month-line"></div>
-        <div class="event-count">${tbaEvents.length} event${tbaEvents.length !== 1 ? 'ów' : ''}</div>
+        <div class="event-count">${tbaEvents.length} event${tbaEvents.length > 1 ? 'ów' : ''}</div>
       </div>
       <div class="events-grid">
         ${tbaEvents.map(ev => buildCard(ev, EVENTS.indexOf(ev))).join("")}
