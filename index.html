@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CrossFit Calendar 2026</title>
+<style>
+  :root {
+    --bg: #0f0f13;
+    --surface: #1a1a24;
+    --surface2: #22222f;
+    --border: #2e2e3e;
+    --accent: #e63946;
+    --blue: #4a90e2;
+    --green: #2ecc71;
+    --orange: #f39c12;
+    --gray: #7f8c8d;
+    --purple: #9b59b6;
+    --text: #e8e8f0;
+    --text-muted: #8888a0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
+
+  header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    padding: 2rem;
+    text-align: center;
+    border-bottom: 2px solid var(--accent);
+  }
+  header h1 { font-size: 2.5rem; font-weight: 800; letter-spacing: 2px; }
+  header h1 span { color: var(--accent); }
+  header p { color: var(--text-muted); margin-top: 0.5rem; font-size: 0.95rem; }
+
+  .controls {
+    display: flex; gap: 1rem; align-items: center; justify-content: center;
+    padding: 1rem 2rem; flex-wrap: wrap;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .controls button {
+    padding: 0.5rem 1.2rem; border: 1px solid var(--border);
+    background: var(--surface2); color: var(--text); cursor: pointer;
+    border-radius: 6px; font-size: 0.9rem; transition: all 0.2s;
+  }
+  .controls button:hover, .controls button.active {
+    background: var(--accent); border-color: var(--accent); color: #fff;
+  }
+  .filter-label { color: var(--text-muted); font-size: 0.85rem; }
+
+  .legend {
+    display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+    padding: 0.75rem 2rem; background: var(--surface); border-bottom: 1px solid var(--border);
+  }
+  .legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: var(--text-muted); }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+
+  main { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+
+  .month-section { margin-bottom: 3rem; }
+  .month-header {
+    display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;
+  }
+  .month-name {
+    font-size: 1.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px;
+  }
+  .month-line { flex: 1; height: 1px; background: var(--border); }
+  .event-count { color: var(--text-muted); font-size: 0.85rem; }
+
+  .events-grid { display: flex; flex-direction: column; gap: 0.75rem; }
+
+  .event-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1rem 1.25rem;
+    display: flex; align-items: center; gap: 1rem;
+    cursor: pointer; transition: all 0.2s;
+    border-left: 4px solid var(--gray);
+    position: relative;
+  }
+  .event-card:hover { background: var(--surface2); transform: translateX(3px); }
+  .event-card.qualifier { border-left-color: var(--blue); }
+  .event-card.final { border-left-color: var(--accent); }
+  .event-card.local { border-left-color: var(--green); }
+  .event-card.tba { border-left-color: var(--gray); opacity: 0.7; }
+  .event-card.global { border-left-color: var(--purple); }
+
+  .event-date {
+    min-width: 100px; font-size: 0.85rem; color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .event-date .day { font-size: 1.4rem; font-weight: 700; color: var(--text); line-height: 1; }
+  .event-date .range { font-size: 0.75rem; }
+
+  .event-info { flex: 1; }
+  .event-name { font-size: 1rem; font-weight: 600; margin-bottom: 0.3rem; }
+  .event-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+  .tag {
+    font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: 20px;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .tag.cat-qualifier { background: rgba(74,144,226,0.2); color: #4a90e2; }
+  .tag.cat-final { background: rgba(230,57,70,0.2); color: #e63946; }
+  .tag.cat-local { background: rgba(46,204,113,0.2); color: #2ecc71; }
+  .tag.cat-global { background: rgba(155,89,182,0.2); color: #9b59b6; }
+  .tag.cat-rx { background: rgba(243,156,18,0.2); color: #f39c12; }
+  .tag.cat-scaled { background: rgba(52,152,219,0.2); color: #3498db; }
+  .tag.cat-intermediate { background: rgba(26,188,156,0.2); color: #1abc9c; }
+  .tag.cat-masters { background: rgba(230,126,34,0.2); color: #e67e22; }
+  .tag.cat-teams { background: rgba(52,73,94,0.5); color: #bdc3c7; }
+  .tag.cat-open { background: rgba(149,165,166,0.2); color: #95a5a6; }
+  .tag.cat-tba { background: rgba(127,140,141,0.2); color: #7f8c8d; }
+
+  .event-location { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.3rem; }
+  .event-location::before { content: '📍 '; }
+
+  .event-type-badge {
+    font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 4px; font-weight: 700;
+    text-transform: uppercase; white-space: nowrap;
+  }
+  .badge-qualifier { background: rgba(74,144,226,0.15); color: #4a90e2; border: 1px solid rgba(74,144,226,0.3); }
+  .badge-final { background: rgba(230,57,70,0.15); color: #e63946; border: 1px solid rgba(230,57,70,0.3); }
+  .badge-event { background: rgba(46,204,113,0.15); color: #2ecc71; border: 1px solid rgba(46,204,113,0.3); }
+  .badge-global { background: rgba(155,89,182,0.15); color: #9b59b6; border: 1px solid rgba(155,89,182,0.3); }
+  .badge-tba { background: rgba(127,140,141,0.15); color: #7f8c8d; border: 1px solid rgba(127,140,141,0.3); }
+
+  .no-events { color: var(--text-muted); font-style: italic; padding: 1rem; }
+
+  /* Modal */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7); z-index: 100;
+    align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 2rem; max-width: 500px; width: 90%;
+    position: relative;
+  }
+  .modal h2 { font-size: 1.3rem; margin-bottom: 1rem; color: var(--text); }
+  .modal .detail-row { display: flex; gap: 0.5rem; margin-bottom: 0.6rem; font-size: 0.9rem; }
+  .detail-label { color: var(--text-muted); min-width: 90px; }
+  .modal-close {
+    position: absolute; top: 1rem; right: 1rem;
+    background: none; border: none; color: var(--text-muted);
+    cursor: pointer; font-size: 1.4rem; line-height: 1;
+  }
+  .modal-close:hover { color: var(--accent); }
+
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.6rem; }
+    main { padding: 1rem; }
+    .event-card { flex-wrap: wrap; }
+    .event-date { min-width: auto; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>CROSSFIT <span>CALENDAR</span> 2026</h1>
+  <p>Polskie i europejskie zawody CrossFit · Season 2026</p>
+</header>
+
+<div class="controls">
+  <span class="filter-label">Filtruj:</span>
+  <button class="active" data-filter="all">Wszystkie</button>
+  <button data-filter="qualifier">Kwalifikacje</button>
+  <button data-filter="final">Finały</button>
+  <button data-filter="local">Lokalne</button>
+  <button data-filter="global">CrossFit HQ</button>
+  <button data-filter="tba">TBA</button>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="dot" style="background:#4a90e2"></div> Kwalifikacje</div>
+  <div class="legend-item"><div class="dot" style="background:#e63946"></div> Finały</div>
+  <div class="legend-item"><div class="dot" style="background:#2ecc71"></div> Lokalne eventy</div>
+  <div class="legend-item"><div class="dot" style="background:#9b59b6"></div> CrossFit HQ / Global</div>
+  <div class="legend-item"><div class="dot" style="background:#7f8c8d"></div> TBA</div>
+</div>
+
+<main id="calendar-main"></main>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <button class="modal-close" id="modal-close">✕</button>
+    <h2 id="modal-title"></h2>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+const EVENTS = [
+  // ==================== CROSSFIT HQ GLOBAL SEASON ====================
+  {
+    name: "CrossFit Open 2026",
+    start: "2026-02-26", end: "2026-03-16",
+    type: "global", categories: ["Open"],
+    location: "Online (worldwide)",
+    notes: "Roczny open — wejście do sezonu CrossFit Games 2026"
+  },
+  {
+    name: "CrossFit Quarterfinals 2026",
+    start: "2026-05-07", end: "2026-05-10",
+    type: "global", categories: ["RX", "Masters"],
+    location: "Online",
+    notes: "Top zawodnicy z Open rywalizują o awans do Semifinals"
+  },
+  {
+    name: "CrossFit Semifinals Europe — Strength in Depth",
+    start: "2026-06-05", end: "2026-06-07",
+    type: "global", categories: ["RX"],
+    location: "Londyn, UK",
+    notes: "Europejski półfinał CrossFit Games 2026"
+  },
+  {
+    name: "CrossFit Semifinals — Syndicate Crown",
+    start: "2026-06-12", end: "2026-06-14",
+    type: "global", categories: ["Teams"],
+    location: "USA",
+    notes: "Półfinał drużynowy North America East"
+  },
+  {
+    name: "CrossFit Games 2026",
+    start: "2026-07-27", end: "2026-08-02",
+    type: "global", categories: ["RX", "Masters", "Teams"],
+    location: "Fort Worth, TX, USA",
+    notes: "Największe zawody CrossFit na świecie"
+  },
+
+  // ==================== MAJ ====================
+  {
+    name: "Czechia Throwdown 2026",
+    start: "2026-05-01", end: "2026-05-22",
+    type: "qualifier", categories: ["Intermediate"],
+    location: "Czechy",
+    notes: "Okno kwalifikacyjne"
+  },
+  {
+    name: "Belgrad Games 2026 — Kwalifikacje",
+    start: "2026-05-20", end: "2026-06-03",
+    type: "qualifier", categories: [],
+    location: "Belgrad, Serbia",
+    notes: "Okno kwalifikacyjne"
+  },
+  {
+    name: "CrossFit Old Mine Domination Vol.2",
+    start: "2026-05-23", end: "2026-05-23",
+    type: "local", categories: ["Scaled"],
+    location: "Polska",
+    notes: ""
+  },
+  {
+    name: "Login Lublin",
+    start: "2026-05-23", end: "2026-05-23",
+    type: "local", categories: [],
+    location: "Lublin, PL",
+    notes: ""
+  },
+
+  // ==================== CZERWIEC ====================
+  {
+    name: "German Throwdown 2026 — Kwalifikacje",
+    start: "2026-06-11", end: "2026-07-04",
+    type: "qualifier", categories: ["Intermediate", "Scaled"],
+    location: "Niemcy",
+    notes: "Okno kwalifikacyjne"
+  },
+  {
+    name: "Malaga Throwdown 2026 — Kwalifikacje",
+    start: "2026-06-12", end: "2026-06-28",
+    type: "qualifier", categories: ["Intermediate", "Scaled"],
+    location: "Malaga, Hiszpania",
+    notes: "Okno kwalifikacyjne"
+  },
+  {
+    name: "Amsterdam Throwdown 2026 — Kwalifikacje",
+    start: "2026-06-15", end: "2026-07-05",
+    type: "qualifier", categories: ["RX", "Masters"],
+    location: "Amsterdam, Holandia",
+    notes: "OPEN LOGINLAB"
+  },
+  {
+    name: "LoginLab Wołów",
+    start: "2026-06-18", end: "2026-06-20",
+    type: "local", categories: [],
+    location: "Wołów, PL",
+    notes: ""
+  },
+
+  // ==================== LIPIEC ====================
+  {
+    name: "East Summer Challenge",
+    start: "2026-07-04", end: "2026-07-04",
+    type: "local", categories: ["Open"],
+    location: "Łuków, PL",
+    notes: "Zapisy od 01.05"
+  },
+  {
+    name: "LoginLab Online",
+    start: "2026-07-06", end: "2026-07-19",
+    type: "local", categories: [],
+    location: "Online",
+    notes: ""
+  },
+  {
+    name: "Best Fit Games Teams",
+    start: "2026-07-18", end: "2026-07-18",
+    type: "local", categories: ["Teams"],
+    location: "Rybnik, PL",
+    notes: ""
+  },
+
+  // ==================== SIERPIEŃ ====================
+  {
+    name: "Login Krotoszyn",
+    start: "2026-08-07", end: "2026-08-09",
+    type: "local", categories: [],
+    location: "Krotoszyn, PL",
+    notes: ""
+  },
+
+  // ==================== WRZESIEŃ ====================
+  {
+    name: "Belgrad Games 2026 — Finał",
+    start: "2026-09-18", end: "2026-09-20",
+    type: "final", categories: [],
+    location: "Belgrad, Serbia",
+    notes: ""
+  },
+
+  // ==================== PAŹDZIERNIK ====================
+  {
+    name: "Czechia Throwdown Finals",
+    start: "2026-10-10", end: "2026-10-11",
+    type: "final", categories: [],
+    location: "Czechy",
+    notes: ""
+  },
+  {
+    name: "Athletes Clash Radomsko",
+    start: null, end: null,
+    type: "tba", categories: [],
+    location: "Radomsko, PL",
+    notes: "Data TBA"
+  },
+
+  // ==================== LISTOPAD ====================
+  {
+    name: "German Throwdown Finals",
+    start: "2026-11-07", end: "2026-11-08",
+    type: "final", categories: [],
+    location: "Niemcy",
+    notes: ""
+  },
+  {
+    name: "Malaga Throwdown Finals",
+    start: "2026-11-27", end: "2026-11-29",
+    type: "final", categories: [],
+    location: "Malaga, Hiszpania",
+    notes: ""
+  },
+  {
+    name: "Best Fit Games Amator",
+    start: null, end: null,
+    type: "tba", categories: [],
+    location: "Rybnik, PL",
+    notes: "Data TBA"
+  },
+
+  // ==================== GRUDZIEŃ ====================
+  {
+    name: "Amsterdam Throwdown Finals",
+    start: "2026-12-05", end: "2026-12-06",
+    type: "final", categories: [],
+    location: "Amsterdam, Holandia",
+    notes: ""
+  },
+];
+
+const MONTHS = [
+  { num: 1, name: "Styczeń" },
+  { num: 2, name: "Luty" },
+  { num: 3, name: "Marzec" },
+  { num: 4, name: "Kwiecień" },
+  { num: 5, name: "Maj" },
+  { num: 6, name: "Czerwiec" },
+  { num: 7, name: "Lipiec" },
+  { num: 8, name: "Sierpień" },
+  { num: 9, name: "Wrzesień" },
+  { num: 10, name: "Październik" },
+  { num: 11, name: "Listopad" },
+  { num: 12, name: "Grudzień" },
+];
+
+const TYPE_LABELS = {
+  qualifier: "Kwalifikacje",
+  final: "Finał",
+  local: "Event",
+  global: "CrossFit HQ",
+  tba: "TBA",
+};
+
+const BADGE_CLASS = {
+  qualifier: "badge-qualifier",
+  final: "badge-final",
+  local: "badge-event",
+  global: "badge-global",
+  tba: "badge-tba",
+};
+
+const CARD_CLASS = {
+  qualifier: "qualifier",
+  final: "final",
+  local: "local",
+  global: "global",
+  tba: "tba",
+};
+
+let activeFilter = "all";
+
+function formatDate(dateStr) {
+  if (!dateStr) return "TBA";
+  const d = new Date(dateStr + "T00:00:00");
+  return d.toLocaleDateString("pl-PL", { day: "2-digit", month: "2-digit" });
+}
+
+function getEventMonth(ev) {
+  if (!ev.start) return null;
+  return parseInt(ev.start.split("-")[1]);
+}
+
+function renderDateBlock(ev) {
+  if (!ev.start) return `<div class="event-date"><div class="day">TBA</div></div>`;
+  const sd = new Date(ev.start + "T00:00:00");
+  const startDay = sd.getDate();
+  if (ev.end && ev.start !== ev.end) {
+    const ed = new Date(ev.end + "T00:00:00");
+    const endDay = ed.getDate();
+    const endMonth = ed.getMonth() !== sd.getMonth()
+      ? `<br>${ed.toLocaleDateString("pl-PL", { month: "short" })}`
+      : "";
+    return `<div class="event-date"><div class="day">${String(startDay).padStart(2,'0')}–${String(endDay).padStart(2,'0')}</div><div class="range">${sd.toLocaleDateString("pl-PL",{month:"short"})}${endMonth}</div></div>`;
+  }
+  return `<div class="event-date"><div class="day">${String(startDay).padStart(2,'0')}</div><div class="range">${sd.toLocaleDateString("pl-PL",{month:"short"})}</div></div>`;
+}
+
+function renderTags(ev) {
+  return ev.categories.map(c => `<span class="tag cat-${c.toLowerCase()}">${c}</span>`).join("");
+}
+
+function buildCard(ev, idx) {
+  return `
+    <div class="event-card ${CARD_CLASS[ev.type]}" data-idx="${idx}" role="button" tabindex="0">
+      ${renderDateBlock(ev)}
+      <div class="event-info">
+        <div class="event-name">${ev.name}</div>
+        <div class="event-tags">${renderTags(ev)}</div>
+        ${ev.location ? `<div class="event-location">${ev.location}</div>` : ""}
+      </div>
+      <span class="event-type-badge ${BADGE_CLASS[ev.type]}">${TYPE_LABELS[ev.type]}</span>
+    </div>`;
+}
+
+function render() {
+  const main = document.getElementById("calendar-main");
+  const filtered = activeFilter === "all" ? EVENTS : EVENTS.filter(e => e.type === activeFilter);
+
+  // TBA events at end
+  const tbaEvents = filtered.filter(e => !e.start);
+  const dated = filtered.filter(e => e.start);
+
+  let html = "";
+  MONTHS.forEach(m => {
+    const monthEvents = dated.filter(e => getEventMonth(e) === m.num);
+    if (monthEvents.length === 0) return;
+
+    const sortedMonth = [...monthEvents].sort((a,b) => a.start.localeCompare(b.start));
+    const originalIndexes = sortedMonth.map(ev => EVENTS.indexOf(ev));
+
+    html += `<section class="month-section">
+      <div class="month-header">
+        <div class="month-name">${m.name}</div>
+        <div class="month-line"></div>
+        <div class="event-count">${sortedMonth.length} event${sortedMonth.length !== 1 ? 'ów' : ''}</div>
+      </div>
+      <div class="events-grid">
+        ${sortedMonth.map((ev, i) => buildCard(ev, originalIndexes[i])).join("")}
+      </div>
+    </section>`;
+  });
+
+  if (tbaEvents.length > 0) {
+    html += `<section class="month-section">
+      <div class="month-header">
+        <div class="month-name">Data TBA</div>
+        <div class="month-line"></div>
+        <div class="event-count">${tbaEvents.length} event${tbaEvents.length !== 1 ? 'ów' : ''}</div>
+      </div>
+      <div class="events-grid">
+        ${tbaEvents.map(ev => buildCard(ev, EVENTS.indexOf(ev))).join("")}
+      </div>
+    </section>`;
+  }
+
+  if (!html) html = `<div class="no-events">Brak wydarzeń dla wybranego filtru.</div>`;
+  main.innerHTML = html;
+
+  // Attach click events
+  main.querySelectorAll(".event-card").forEach(card => {
+    card.addEventListener("click", () => openModal(parseInt(card.dataset.idx)));
+    card.addEventListener("keydown", e => { if(e.key==="Enter") openModal(parseInt(card.dataset.idx)); });
+  });
+}
+
+function openModal(idx) {
+  const ev = EVENTS[idx];
+  document.getElementById("modal-title").textContent = ev.name;
+
+  let dateStr = "TBA";
+  if (ev.start) {
+    dateStr = ev.start === ev.end || !ev.end
+      ? formatDate(ev.start)
+      : `${formatDate(ev.start)} – ${formatDate(ev.end)}`;
+  }
+
+  let body = `
+    <div class="detail-row"><span class="detail-label">📅 Data:</span><span>${dateStr}</span></div>
+    <div class="detail-row"><span class="detail-label">📍 Miejsce:</span><span>${ev.location || "—"}</span></div>
+    <div class="detail-row"><span class="detail-label">🏷 Typ:</span><span>${TYPE_LABELS[ev.type]}</span></div>`;
+  if (ev.categories.length)
+    body += `<div class="detail-row"><span class="detail-label">🎯 Kategorie:</span><span>${ev.categories.join(", ")}</span></div>`;
+  if (ev.notes)
+    body += `<div class="detail-row"><span class="detail-label">📝 Uwagi:</span><span>${ev.notes}</span></div>`;
+
+  document.getElementById("modal-body").innerHTML = body;
+  document.getElementById("modal").classList.add("open");
+}
+
+document.getElementById("modal-close").addEventListener("click", () => {
+  document.getElementById("modal").classList.remove("open");
+});
+document.getElementById("modal").addEventListener("click", e => {
+  if (e.target === document.getElementById("modal")) document.getElementById("modal").classList.remove("open");
+});
+
+document.querySelectorAll(".controls button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".controls button").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    activeFilter = btn.dataset.filter;
+    render();
+  });
+});
+
+render();
+</script>
+</body>
+</html>
