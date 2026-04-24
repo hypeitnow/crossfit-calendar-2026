@@ -83,6 +83,7 @@
   .event-card.local { border-left-color: var(--green); }
   .event-card.tba { border-left-color: var(--gray); opacity: 0.7; }
   .event-card.global { border-left-color: var(--purple); }
+  .event-card.semifinal { border-left-color: var(--orange); }
 
   .event-date {
     min-width: 100px; font-size: 0.85rem; color: var(--text-muted);
@@ -119,8 +120,9 @@
   }
   .badge-qualifier { background: rgba(74,144,226,0.15); color: #4a90e2; border: 1px solid rgba(74,144,226,0.3); }
   .badge-final { background: rgba(230,57,70,0.15); color: #e63946; border: 1px solid rgba(230,57,70,0.3); }
-  .badge-event { background: rgba(46,204,113,0.15); color: #2ecc71; border: 1px solid rgba(46,204,113,0.3); }
+  .badge-local { background: rgba(46,204,113,0.15); color: #2ecc71; border: 1px solid rgba(46,204,113,0.3); }
   .badge-global { background: rgba(155,89,182,0.15); color: #9b59b6; border: 1px solid rgba(155,89,182,0.3); }
+  .badge-semifinal { background: rgba(243,156,18,0.15); color: #f39c12; border: 1px solid rgba(243,156,18,0.3); }
   .badge-tba { background: rgba(127,140,141,0.15); color: #7f8c8d; border: 1px solid rgba(127,140,141,0.3); }
 
   .no-events { color: var(--text-muted); font-style: italic; padding: 1rem; }
@@ -159,24 +161,26 @@
 
 <header>
   <h1>CROSSFIT <span>CALENDAR</span> 2026</h1>
-  <p>Polskie i europejskie zawody CrossFit · Season 2026</p>
+  <p>Polskie i europejskie zawody CrossFit · CrossFit Games Season 2026</p>
 </header>
 
 <div class="controls">
   <span class="filter-label">Filtruj:</span>
   <button class="active" data-filter="all">Wszystkie</button>
+  <button data-filter="global">CrossFit HQ</button>
+  <button data-filter="semifinal">Semifinals</button>
   <button data-filter="qualifier">Kwalifikacje</button>
   <button data-filter="final">Finały</button>
   <button data-filter="local">Lokalne</button>
-  <button data-filter="global">CrossFit HQ</button>
   <button data-filter="tba">TBA</button>
 </div>
 
 <div class="legend">
+  <div class="legend-item"><div class="dot" style="background:#9b59b6"></div> CrossFit HQ / Global</div>
+  <div class="legend-item"><div class="dot" style="background:#f39c12"></div> Semifinals</div>
   <div class="legend-item"><div class="dot" style="background:#4a90e2"></div> Kwalifikacje</div>
   <div class="legend-item"><div class="dot" style="background:#e63946"></div> Finały</div>
   <div class="legend-item"><div class="dot" style="background:#2ecc71"></div> Lokalne eventy</div>
-  <div class="legend-item"><div class="dot" style="background:#9b59b6"></div> CrossFit HQ / Global</div>
   <div class="legend-item"><div class="dot" style="background:#7f8c8d"></div> TBA</div>
 </div>
 
@@ -192,64 +196,146 @@
 
 <script>
 const EVENTS = [
-  // ==================== CROSSFIT HQ GLOBAL SEASON ====================
+  // ==================== CROSSFIT HQ — OPEN ====================
   {
     name: "CrossFit Open 2026",
     start: "2026-02-26", end: "2026-03-16",
     type: "global", categories: ["Open"],
     location: "Online (worldwide)",
-    notes: "Roczny open — wejście do sezonu CrossFit Games 2026"
+    notes: "Roczny open — wejście do sezonu CrossFit Games 2026. Każdy może się zapisać."
   },
+  // ==================== CROSSFIT HQ — QUARTERFINALS ====================
   {
     name: "CrossFit Quarterfinals 2026",
-    start: "2026-05-07", end: "2026-05-10",
+    start: "2026-03-26", end: "2026-03-30",
     type: "global", categories: ["RX", "Masters"],
     location: "Online",
-    notes: "Top zawodnicy z Open rywalizują o awans do Semifinals"
+    notes: "Top zawodnicy z Open rywalizują o awans do Semifinals. Wyniki online."
+  },
+  // ==================== CROSSFIT HQ — SEMIFINALS (In-Person) ====================
+  {
+    name: "Mayhem Classic (Semifinal)",
+    start: "2026-04-17", end: "2026-04-19",
+    type: "semifinal", categories: ["RX"],
+    location: "Cookeville, TN, USA",
+    notes: "CrossFit Games 2026 Semifinal — North America East"
   },
   {
-    name: "CrossFit Semifinals Europe — Strength in Depth",
-    start: "2026-06-05", end: "2026-06-07",
-    type: "global", categories: ["RX"],
-    location: "Londyn, UK",
-    notes: "Europejski półfinał CrossFit Games 2026"
+    name: "Mayhem Classic (Semifinal) — Weekend 2",
+    start: "2026-04-24", end: "2026-04-27",
+    type: "semifinal", categories: ["Masters"],
+    location: "Cookeville, TN, USA",
+    notes: "CrossFit Games 2026 Semifinal — Masters / second wave"
   },
   {
-    name: "CrossFit Semifinals — Syndicate Crown",
-    start: "2026-06-12", end: "2026-06-14",
-    type: "global", categories: ["Teams"],
+    name: "Far East Throwdown (Semifinal)",
+    start: "2026-05-01", end: "2026-05-03",
+    type: "semifinal", categories: ["RX"],
+    location: "Azja / Pacyfik",
+    notes: "CrossFit Games 2026 Semifinal — Asia / Pacific region"
+  },
+  {
+    name: "French Throwdown (Semifinal)",
+    start: "2026-05-15", end: "2026-05-17",
+    type: "semifinal", categories: ["RX"],
+    location: "Francja",
+    notes: "CrossFit Games 2026 Semifinal — Europe region (France)"
+  },
+  {
+    name: "Torian Pro (Semifinal)",
+    start: "2026-05-21", end: "2026-05-24",
+    type: "semifinal", categories: ["RX"],
+    location: "Australia",
+    notes: "CrossFit Games 2026 Semifinal — Australia / Oceania region"
+  },
+  {
+    name: "Syndicate Crown (Semifinal)",
+    start: "2026-05-29", end: "2026-05-31",
+    type: "semifinal", categories: ["Teams"],
     location: "USA",
-    notes: "Półfinał drużynowy North America East"
+    notes: "CrossFit Games 2026 Semifinal — North America East (Teams)"
   },
+  {
+    name: "Northern California Classic (Semifinal)",
+    start: "2026-05-29", end: "2026-06-01",
+    type: "semifinal", categories: ["RX"],
+    location: "Norcal, USA",
+    notes: "CrossFit Games 2026 Semifinal — North America West"
+  },
+  {
+    name: "Strength in Depth (Semifinal)",
+    start: "2026-06-12", end: "2026-06-14",
+    type: "semifinal", categories: ["RX"],
+    location: "Londyn, UK",
+    notes: "CrossFit Games 2026 Semifinal — Europe (UK). Najważniejszy europejski półfinał."
+  },
+  // ==================== CROSSFIT HQ — SEMIFINALS (Online) ====================
+  {
+    name: "Age-Group Online Semifinals 2026",
+    start: "2026-05-07", end: "2026-05-12",
+    type: "semifinal", categories: ["Masters"],
+    location: "Online",
+    notes: "Półfinał online dla kategorii wiekowych (Masters)"
+  },
+  {
+    name: "Adaptive Online Semifinals 2026",
+    start: "2026-05-14", end: "2026-05-18",
+    type: "semifinal", categories: [],
+    location: "Online",
+    notes: "Półfinał online dla kategorii Adaptive Athletes"
+  },
+  {
+    name: "Team Online Semifinals 2026",
+    start: "2026-06-04", end: "2026-06-09",
+    type: "semifinal", categories: ["Teams"],
+    location: "Online",
+    notes: "Półfinał online dla drużyn"
+  },
+  {
+    name: "Individual Online Semifinals 2026",
+    start: "2026-06-11", end: "2026-06-16",
+    type: "semifinal", categories: ["RX"],
+    location: "Online",
+    notes: "Półfinał online dla zawodników indywidualnych"
+  },
+  // ==================== CROSSFIT GAMES ====================
   {
     name: "CrossFit Games 2026",
-    start: "2026-07-27", end: "2026-08-02",
+    start: "2026-07-01", end: "2026-07-31",
     type: "global", categories: ["RX", "Masters", "Teams"],
-    location: "Fort Worth, TX, USA",
-    notes: "Największe zawody CrossFit na świecie"
+    location: "USA (data dokładna TBC)",
+    notes: "Największe zawody CrossFit na świecie. Dokładna data zostanie potwierdzona przez CrossFit HQ."
+  },
+  // ==================== COMMUNITY ====================
+  {
+    name: "CrossFit Community Cup 2026",
+    start: "2026-08-01", end: "2026-08-31",
+    type: "global", categories: ["Open"],
+    location: "Online (worldwide)",
+    notes: "Miesięczny event dla społeczności CrossFit — wszystkie poziomy"
   },
 
-  // ==================== MAJ ====================
+  // ==================== MAJ — POLSKIE / EUROPEJSKIE ====================
   {
-    name: "Czechia Throwdown 2026",
+    name: "Czechia Throwdown 2026 — Kwalifikacje",
     start: "2026-05-01", end: "2026-05-22",
     type: "qualifier", categories: ["Intermediate"],
     location: "Czechy",
-    notes: "Okno kwalifikacyjne"
+    notes: "Okno kwalifikacyjne do Czechia Throwdown Finals (październik)"
   },
   {
     name: "Belgrad Games 2026 — Kwalifikacje",
     start: "2026-05-20", end: "2026-06-03",
     type: "qualifier", categories: [],
     location: "Belgrad, Serbia",
-    notes: "Okno kwalifikacyjne"
+    notes: "Okno kwalifikacyjne do Belgrad Games Finals (wrzesień)"
   },
   {
     name: "CrossFit Old Mine Domination Vol.2",
     start: "2026-05-23", end: "2026-05-23",
     type: "local", categories: ["Scaled"],
     location: "Polska",
-    notes: ""
+    notes: "Lokalne zawody CrossFit"
   },
   {
     name: "Login Lublin",
@@ -265,21 +351,21 @@ const EVENTS = [
     start: "2026-06-11", end: "2026-07-04",
     type: "qualifier", categories: ["Intermediate", "Scaled"],
     location: "Niemcy",
-    notes: "Okno kwalifikacyjne"
+    notes: "Okno kwalifikacyjne online / hybrydowe do German Throwdown Finals (listopad)"
   },
   {
     name: "Malaga Throwdown 2026 — Kwalifikacje",
     start: "2026-06-12", end: "2026-06-28",
     type: "qualifier", categories: ["Intermediate", "Scaled"],
     location: "Malaga, Hiszpania",
-    notes: "Okno kwalifikacyjne"
+    notes: "Okno kwalifikacyjne do Malaga Throwdown Finals (listopad)"
   },
   {
     name: "Amsterdam Throwdown 2026 — Kwalifikacje",
     start: "2026-06-15", end: "2026-07-05",
     type: "qualifier", categories: ["RX", "Masters"],
     location: "Amsterdam, Holandia",
-    notes: "OPEN LOGINLAB"
+    notes: "Okno kwalifikacyjne (OPEN LOGINLAB). Finał w grudniu."
   },
   {
     name: "LoginLab Wołów",
@@ -399,14 +485,16 @@ const TYPE_LABELS = {
   final: "Finał",
   local: "Event",
   global: "CrossFit HQ",
+  semifinal: "Semifinal",
   tba: "TBA",
 };
 
 const BADGE_CLASS = {
   qualifier: "badge-qualifier",
   final: "badge-final",
-  local: "badge-event",
+  local: "badge-local",
   global: "badge-global",
+  semifinal: "badge-semifinal",
   tba: "badge-tba",
 };
 
@@ -415,6 +503,7 @@ const CARD_CLASS = {
   final: "final",
   local: "local",
   global: "global",
+  semifinal: "semifinal",
   tba: "tba",
 };
 
@@ -467,7 +556,6 @@ function render() {
   const main = document.getElementById("calendar-main");
   const filtered = activeFilter === "all" ? EVENTS : EVENTS.filter(e => e.type === activeFilter);
 
-  // TBA events at end
   const tbaEvents = filtered.filter(e => !e.start);
   const dated = filtered.filter(e => e.start);
 
@@ -507,7 +595,6 @@ function render() {
   if (!html) html = `<div class="no-events">Brak wydarzeń dla wybranego filtru.</div>`;
   main.innerHTML = html;
 
-  // Attach click events
   main.querySelectorAll(".event-card").forEach(card => {
     card.addEventListener("click", () => openModal(parseInt(card.dataset.idx)));
     card.addEventListener("keydown", e => { if(e.key==="Enter") openModal(parseInt(card.dataset.idx)); });
